@@ -1,8 +1,9 @@
-from .forms import AddBoulderForm
-from .boulders_controller import get_sorted_boulder_data_based_on, get_existing_boulder_data, retrieve_boulders_based_on_
+from .forms import AddBoulderFormU18UE50, AddBoulderFormBJM, AddBoulderFormBJW
+from .boulders_controller import get_sorted_boulder_data_based_on, get_existing_boulder_data, \
+    retrieve_boulders_based_on_, get_addboulderform_based_on_category, category2boulder_model__mapping
 from django.contrib.auth.decorators import login_required
 import logging
-from .models import UserProfile, Boulder, AllBoulders
+from .models import UserProfile, U18W, U18M, UE50W, UE50M
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
@@ -16,16 +17,16 @@ def home(request):
 
 
 def ranking_view(request):
-    modes = ["amateur", "pro", "u18"]
+    modes = ["u18", "bj", "ue50"]
     genders = ["man", "woman"]
 
     rankings = {}
 
     for mode in modes:
         for gender in genders:
-            key = f"{mode}_{gender}"
-            data = get_sorted_boulder_data_based_on(mode, gender)
-            rankings[key] = data
+            category = f"{mode}_{gender}"
+            data = get_sorted_boulder_data_based_on(category)
+            rankings[category] = data
 
     context = {
         'rankings': rankings,
@@ -33,11 +34,13 @@ def ranking_view(request):
 
     return render(request, "ranking.html", context)
 
-
 @login_required
 def view_boulder(request):
     user_boulders = retrieve_boulders_based_on_(request.user)
     return render(request, 'view_boulder.html', {'boulders': user_boulders, 'username': request.user.username})
+
+
+
 
 @login_required
 def add_boulders_view(request):
@@ -46,11 +49,15 @@ def add_boulders_view(request):
     user_gender = cur_user_profile.gender
     user_mode = cur_user_profile.mode
     user_category = f"{user_mode}_{user_gender}"
-    boulders_for_category = AllBoulders.objects.filter(belonging_categories__name=user_category)
+    form_class_name = get_addboulderform_based_on_category(user_category)
 
-    existing_boulder = get_existing_boulder_data(request.user)
+    existing_boulder = get_existing_boulder_data(request.user, user_category)
     if request.method == 'POST':
-        form = AddBoulderForm(boulders_for_category, request.POST, instance=existing_boulder)
+        if user_category.startswith("ue50") or user_category.startswith("u18"):
+            model = category2boulder_model__mapping(user_category)
+            form = form_class_name(request.POST, instance=existing_boulder, model=model)
+        else:
+            form = form_class_name(request.POST, instance=existing_boulder)
         if form.is_valid():
             boulder_entry = form.save(commit=False)
             boulder_entry.user = request.user
@@ -58,13 +65,21 @@ def add_boulders_view(request):
             logger.info("Boulders added successfully")
             return redirect('jagd:view_boulder')
         else:
-            form = AddBoulderForm(boulders_for_category, instance=existing_boulder)
+            if user_category.startswith("ue50") or user_category.startswith("u18"):
+                model = category2boulder_model__mapping(user_category)
+                form = form_class_name(request.POST, instance=existing_boulder, model=model)
+            else:
+                form = form_class_name(request.POST, instance=existing_boulder)
             logger.error("Boulders addition failed. Unsuccessful form submission")
         return render(request, "add_boulders.html", {'form': form, 'username': request.user.username})
 
     else:
 
-        form = AddBoulderForm(boulders_for_category, instance=existing_boulder)
+        if user_category.startswith("ue50") or user_category.startswith("u18"):
+            model = category2boulder_model__mapping(user_category)
+            form = form_class_name(request.POST, instance=existing_boulder, model=model)
+        else:
+            form = form_class_name(request.POST, instance=existing_boulder)
         return render(request, "add_boulders.html", {'form': form, "username": request.user.username})
 
 

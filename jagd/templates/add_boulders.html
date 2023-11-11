@@ -48,7 +48,7 @@
 <form class="form-container" method="post" action="{% url 'jagd:add_boulders_view' %}">
     {% csrf_token %}
     {% for field in form %}
-        {% if 'Boulder ' in field.name %}
+        {% if 'boulder_' in field.name %}
             {{ field.label_tag }} {{ field }}
         {% endif %}
     {% endfor %}
