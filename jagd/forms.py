@@ -22,7 +22,8 @@ class AddBoulderForm(forms.ModelForm):
             ('Bonus', 'Bonus'),
             ('Top', 'Top'),
         ]
-        for i in range(1, 41):
-            field_name = f'boulder_{i}'
-            self.fields[field_name] = forms.ChoiceField(choices=CHOICES,
-                                                        initial='None', widget=forms.Select(attrs={'class': 'form-control'}))
+
+        for b in available_boulders:
+            field_name = f'Boulder {b.boulder_number}'
+            self.fields[field_name] = forms.ChoiceField(choices=CHOICES, initial='None', widget=forms.Select(attrs={'class': 'form-control'}))
+

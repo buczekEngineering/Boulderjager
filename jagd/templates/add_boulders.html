@@ -48,10 +48,13 @@
 <form class="form-container" method="post" action="{% url 'jagd:add_boulders_view' %}">
     {% csrf_token %}
     {% for field in form %}
-        {{ field.label_tag }} {{ field }}
+        {% if 'Boulder ' in field.name %}
+            {{ field.label_tag }} {{ field }}
+        {% endif %}
     {% endfor %}
     <button type="submit">Submit</button>
 </form>
+
 
        <p><a href="{% url 'jagd:ranking_view' %}">CHECK RANKING</a></p>
     <p><a href="{% url 'jagd:view_boulder' %}">VIEW YOUR BOULDERS</a></p>
