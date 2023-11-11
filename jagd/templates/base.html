@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BOULDERJAGD</title>
+      <style>
+           body {
+            background-color: #E0E0E0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-family: 'Your-Nicer-Font', sans-serif;
+
+        }
+          header {
+            text-align: center;
+        }
+        h1 {
+             color: hotpink;
+            font-family: 'Your-Nicer-Font', sans-serif; /* Replace 'Your-Nicer-Font' with your desired font */
+        }
+        footer {
+            text-align: center;
+        }
+        footer p {
+            font-family: 'Your-Nicer-Font', sans-serif; /* Replace 'Your-Nicer-Font' with your desired font */
+        }
+
+    </style>
+</head>
+<body>
+ {% include 'menu.html' %}
+    <header>
+        <h1>BOULDERJAGD</h1>
+        <nav>
+            <ul>
+                <!--<li><a href="/">Home</a></li>-->
+                <!-- Add more navigation links here -->
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+
+
+    <footer>
+        <br />
+                <br />
+
+                <br />
+
+                <br />
+
+        <p>&copy; {{ year }} JUST DO I.T. </p>
+    </footer>
+</body>
+</html>

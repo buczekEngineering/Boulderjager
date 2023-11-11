@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Login</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.user_name.label_tag }} {{ form.user_name }}
+    {{ form.password.label_tag }} {{ form.password }}
+    <button type="submit">Login</button>
+</form>
+
+  <p>Don't have an account? <a href="{% url 'jagd:register' %}">Register</a></p>
+{% endblock %}

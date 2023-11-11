@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{% for key, entry in rankings.items %}
+  {% with key|add:"_" as mode_gender %}
+  <h2>{{ mode_gender|title }} Ranking</h2>
+  <ul>
+    {% for entry in entry %}
+      <li>{{ entry.user.username }} - Points: {{ entry.points }}</li>
+    {% endfor %}
+  </ul>
+  {% endwith %}
+{% endfor %}
+
+    <br />
+    <br />
+    <br />
+  <p><a href="{% url 'jagd:home' %}">HOME</a></p>
+{% endblock %}

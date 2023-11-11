@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Your Boulders</h1>
+    {% if boulders %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Boulder 1</th>
+                    <th>Boulder 2</th>
+                    <th>Boulder 3</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for boulder in boulders %}
+                    <tr>
+                        <td>{{ boulder.boulder_1 }}</td>
+                        <td>{{ boulder.boulder_2 }}</td>
+                        <td>{{ boulder.boulder_3 }}</td>
+                        <td>{{ boulder.points }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No boulders found.</p>
+    {% endif %}
+
+    <p><a href="{% url 'jagd:ranking_view' %}">CHECK RANKING</a></p>
+    <p><a href="{% url 'jagd:add_boulders_view' %}">ADD BOULDERS</a></p>
+     <p><a href="{% url 'jagd:home' %}">HOME</a></p>
+        <br/>
+        <br/>
+        <h3> Logged User: {{ username }}</h3>
+
+
+
+{% endblock %}
