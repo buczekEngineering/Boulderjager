@@ -8,11 +8,7 @@ class LoginForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput)
 
 class AddBoulderForm(forms.ModelForm):
-    CHOICES = [
-        ('None', 'None'),
-        ('Bonus', 'Bonus'),
-        ('Top', 'Top'),
-    ]
+
 
     class Meta:
         model = Boulder
@@ -21,7 +17,12 @@ class AddBoulderForm(forms.ModelForm):
     def __init__(self, available_boulders, *args, **kwargs):
         super(AddBoulderForm, self).__init__(*args, **kwargs)
 
+        CHOICES = [
+            ('None', 'None'),
+            ('Bonus', 'Bonus'),
+            ('Top', 'Top'),
+        ]
         for i in range(1, 41):
             field_name = f'boulder_{i}'
-            self.fields[field_name] = forms.ChoiceField(choices=[('None', 'None'), ('Bonus', 'Bonus'), ('Top', 'Top')],
+            self.fields[field_name] = forms.ChoiceField(choices=CHOICES,
                                                         initial='None', widget=forms.Select(attrs={'class': 'form-control'}))
