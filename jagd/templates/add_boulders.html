@@ -45,13 +45,14 @@
     }
     </style>
     <h2>Add Boulders</h2>
-   <form class="form-container" method="post"  action="{% url 'jagd:add_boulders_view' %}">
+<form class="form-container" method="post" action="{% url 'jagd:add_boulders_view' %}">
     {% csrf_token %}
-    {{ form.boulder_1.label_tag }} {{ form.boulder_1 }}
-    {{ form.boulder_2.label_tag }} {{ form.boulder_2 }}
-    {{ form.boulder_3.label_tag }} {{ form.boulder_3 }}
+    {% for field in form %}
+        {{ field.label_tag }} {{ field }}
+    {% endfor %}
     <button type="submit">Submit</button>
 </form>
+
        <p><a href="{% url 'jagd:ranking_view' %}">CHECK RANKING</a></p>
     <p><a href="{% url 'jagd:view_boulder' %}">VIEW YOUR BOULDERS</a></p>
      <p><a href="{% url 'jagd:home' %}">HOME</a></p>

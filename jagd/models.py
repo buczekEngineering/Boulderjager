@@ -15,6 +15,19 @@ class UserProfile(models.Model):
     ]
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='man')
     mode = models.CharField(max_length=10, choices=COMPETITION_CHOICES, default='amateur')
+    category =models.CharField(max_length=100, default=f"{mode}_{gender}")
+
+class UserSubmission(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+
+class AllBoulders(models.Model):
+    boulder_number = models.IntegerField(unique=True)
+    belonging_categories = models.ManyToManyField('Category')
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=100, unique=True)
 
 
 class Boulder(models.Model):
