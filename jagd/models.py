@@ -54,6 +54,12 @@ class BJW(models.Model):
         self.points = self.calculate_points()
         super(BJW, self).save(*args, **kwargs)
 
+    def get_boulder_fields_and_values(self):
+        # Return a dictionary of boulder field names and their values
+        boulder_fields = [field.name for field in self._meta.fields if field.name.startswith("boulder_")]
+        boulder_values = {field: getattr(self, field, "") for field in boulder_fields}
+        return boulder_values
+
     def calculate_points(self):
 
         boulder2points_mapping = {"None": 0, "Bonus": 1, "Top": 2}
@@ -101,6 +107,13 @@ class BJM(models.Model):
         self.points = self.calculate_points()
         super(BJM, self).save(*args, **kwargs)
 
+
+    def get_boulder_fields_and_values(self):
+        # Return a dictionary of boulder field names and their values
+        boulder_fields = [field.name for field in self._meta.fields if field.name.startswith("boulder_")]
+        boulder_values = {field: getattr(self, field, "") for field in boulder_fields}
+        return boulder_values
+
     def calculate_points(self):
 
         boulder2points_mapping = {"None": 0, "Bonus": 1, "Top": 2}
@@ -146,6 +159,12 @@ class U18W(models.Model):
         # Calculate points based on boulder values
         self.points = self.calculate_points()
         super(U18W, self).save(*args, **kwargs)
+
+    def get_boulder_fields_and_values(self):
+        # Return a dictionary of boulder field names and their values
+        boulder_fields = [field.name for field in self._meta.fields if field.name.startswith("boulder_")]
+        boulder_values = {field: getattr(self, field, "") for field in boulder_fields}
+        return boulder_values
 
     def calculate_points(self):
 
@@ -193,6 +212,12 @@ class U18M(models.Model):
         self.points = self.calculate_points()
         super(U18M, self).save(*args, **kwargs)
 
+    def get_boulder_fields_and_values(self):
+        # Return a dictionary of boulder field names and their values
+        boulder_fields = [field.name for field in self._meta.fields if field.name.startswith("boulder_")]
+        boulder_values = {field: getattr(self, field, "") for field in boulder_fields}
+        return boulder_values
+
     def calculate_points(self):
 
         boulder2points_mapping = {"None": 0, "Bonus": 1, "Top": 2}
@@ -239,6 +264,12 @@ class UE50W(models.Model):
         self.points = self.calculate_points()
         super(UE50W, self).save(*args, **kwargs)
 
+    def get_boulder_fields_and_values(self):
+        # Return a dictionary of boulder field names and their values
+        boulder_fields = [field.name for field in self._meta.fields if field.name.startswith("boulder_")]
+        boulder_values = {field: getattr(self, field, "") for field in boulder_fields}
+        return boulder_values
+
     def calculate_points(self):
 
         boulder2points_mapping = {"None": 0, "Bonus": 1, "Top": 2}
@@ -284,6 +315,12 @@ class UE50M(models.Model):
         # Calculate points based on boulder values
         self.points = self.calculate_points()
         super(UE50M, self).save(*args, **kwargs)
+
+    def get_boulder_fields_and_values(self):
+        # Return a dictionary of boulder field names and their values
+        boulder_fields = [field.name for field in self._meta.fields if field.name.startswith("boulder_")]
+        boulder_values = {field: getattr(self, field, "") for field in boulder_fields}
+        return boulder_values
 
     def calculate_points(self):
 

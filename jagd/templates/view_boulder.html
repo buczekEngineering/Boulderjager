@@ -3,28 +3,20 @@
 {% block content %}
     <h1>Your Boulders</h1>
     {% if boulders %}
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Boulder 1</th>
-                    <th>Boulder 2</th>
-                    <th>Boulder 3</th>
-                    <th>Points</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for boulder in boulders %}
-                    <tr>
-                        <td>{{ boulder.boulder_1 }}</td>
-                        <td>{{ boulder.boulder_2 }}</td>
-                        <td>{{ boulder.boulder_3 }}</td>
-                        <td>{{ boulder.points }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <p>No boulders found.</p>
+
+    <tr>
+        {% for boulder in boulders %}
+    <tr>
+        {% for field, value in boulder.get_boulder_fields_and_values.items %}
+            <td> {{ field }} ->> {{ value }}</td>
+            <br/>
+            <br/>
+        {% endfor %}
+      <br/>
+        <br/>
+        <td> Gesamt {{ boulder.points }}</td>
+    </tr>
+{% endfor %}
     {% endif %}
 
     <p><a href="{% url 'jagd:ranking_view' %}">CHECK RANKING</a></p>
