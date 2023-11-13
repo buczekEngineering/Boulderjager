@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-
+from django.contrib import admin
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -338,3 +338,14 @@ class VerificationCode(models.Model):
 
     def __str__(self):
         return self.code
+
+
+admin.site.register(UE50W)
+admin.site.register(UE50M)
+admin.site.register(VerificationCode)
+admin.site.register(UserProfile)
+admin.site.register(BJM)
+admin.site.register(BJW)
+admin.site.register(U18M)
+admin.site.register(U18W)
+
