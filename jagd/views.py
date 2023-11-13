@@ -1,14 +1,16 @@
-from .forms import AddBoulderFormU18UE50, AddBoulderFormBJM, AddBoulderFormBJW
+from .forms import AddBoulderFormBJM, AddBoulderFormBJW, AddBoulderFormUE50M, AddBoulderFormU18M, \
+    AddBoulderFormU18W, AddBoulderFormUE50W
 from .boulders_controller import get_sorted_boulder_data_based_on, get_existing_boulder_data, \
-    retrieve_boulders_based_on_, get_addboulderform_based_on_category, category2boulder_model__mapping
+    retrieve_boulders_based_on_
 from django.contrib.auth.decorators import login_required
 import logging
-from .models import UserProfile, U18W, U18M, UE50W, UE50M
+from .models import UserProfile, U18W, U18M, UE50W, UE50M, BJM, BJW
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from django.contrib import messages
 
 from django.contrib.auth import authenticate, login, logout
+
 logger = logging.getLogger(__name__)
 
 
@@ -34,30 +36,24 @@ def ranking_view(request):
 
     return render(request, "ranking.html", context)
 
+
 @login_required
 def view_boulder(request):
     user_boulders = retrieve_boulders_based_on_(request.user)
     return render(request, 'view_boulder.html', {'boulders': user_boulders, 'username': request.user.username})
 
 
-
-
 @login_required
 def add_boulders_view(request):
-
     cur_user_profile = UserProfile.objects.get(user=request.user)
     user_gender = cur_user_profile.gender
     user_mode = cur_user_profile.mode
     user_category = f"{user_mode}_{user_gender}"
-    form_class_name = get_addboulderform_based_on_category(user_category)
 
     existing_boulder = get_existing_boulder_data(request.user, user_category)
     if request.method == 'POST':
-        if user_category.startswith("ue50") or user_category.startswith("u18"):
-            model = category2boulder_model__mapping(user_category)
-            form = form_class_name(request.POST, instance=existing_boulder, model=model)
-        else:
-            form = form_class_name(request.POST, instance=existing_boulder)
+        form_name = retrieve_form_based_on_category(user_category)
+        form = form_name(request.POST, instance=existing_boulder)
         if form.is_valid():
             boulder_entry = form.save(commit=False)
             boulder_entry.user = request.user
@@ -65,22 +61,43 @@ def add_boulders_view(request):
             logger.info("Boulders added successfully")
             return redirect('jagd:view_boulder')
         else:
-            if user_category.startswith("ue50") or user_category.startswith("u18"):
-                model = category2boulder_model__mapping(user_category)
-                form = form_class_name(request.POST, instance=existing_boulder, model=model)
-            else:
-                form = form_class_name(request.POST, instance=existing_boulder)
+            form_name = retrieve_form_based_on_category(user_category)
+            form = form_name(request.POST, instance=existing_boulder)
+
             logger.error("Boulders addition failed. Unsuccessful form submission")
         return render(request, "add_boulders.html", {'form': form, 'username': request.user.username})
 
     else:
-
-        if user_category.startswith("ue50") or user_category.startswith("u18"):
-            model = category2boulder_model__mapping(user_category)
-            form = form_class_name(request.POST, instance=existing_boulder, model=model)
-        else:
-            form = form_class_name(request.POST, instance=existing_boulder)
+        form_name= retrieve_form_based_on_category(user_category)
+        form = form_name(instance=existing_boulder)
         return render(request, "add_boulders.html", {'form': form, "username": request.user.username})
+
+
+def create_boulder_entry(user, category):
+    if category == 'u18_man':
+        U18M.objects.create(user=user)
+    elif category == 'u18_woman':
+        U18W.objects.create(user=user)
+    elif category == 'ue50_man':
+        UE50M.objects.create(user=user)
+    elif category == 'ue50_woman':
+        UE50W.objects.create(user=user)
+    elif category == 'bj_man':
+        BJM.objects.create(user=user)
+    elif category == 'bj_woman':
+        BJW.objects.create(user=user)
+
+
+def retrieve_form_based_on_category(category):
+    logger.info(f"Retrieving form based on category: {category}")
+    category2form_mapping = {"ue18_man": AddBoulderFormU18M,
+                             "bj_man": AddBoulderFormBJM,
+                             "ue50_woman": AddBoulderFormUE50W,
+                             "bj_woman": AddBoulderFormBJW,
+                             "ue50_man": AddBoulderFormUE50M,
+                             "u18_woman": AddBoulderFormU18W}
+    logger.info(f"Form retrieved: {category2form_mapping[category]}")
+    return category2form_mapping[category]
 
 
 def signup(request):
@@ -117,14 +134,15 @@ def signup(request):
         myuser.last_name = lname
         myuser.is_active = True
         myuser.save()
-        # Create the UserProfile and associate it with the User
         gender = request.POST.get('gender')
         mode = request.POST.get('mode')
         UserProfile.objects.create(user=myuser, gender=gender, mode=mode)
+        category = f"{mode}_{gender}"
+        logger.info(f"Creating boulder entry for user: {myuser} and category: {category}")
+        create_boulder_entry(myuser, category)
 
         messages.success(request,
                          "Your Account has been created succesfully!! Please check your email to confirm your email address in order to activate your account.")
-
 
         return redirect('jagd:signin')
 

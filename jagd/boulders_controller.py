@@ -1,4 +1,4 @@
-from jagd.forms import AddBoulderFormU18UE50, AddBoulderFormBJW, AddBoulderFormBJM
+from jagd.forms import AddBoulderFormBJW, AddBoulderFormBJM
 from jagd.models import U18W, U18M, UE50W, UE50M, BJW, BJM, UserProfile
 
 
@@ -29,14 +29,22 @@ def retrieve_boulders_based_on_(user):
     return boulder_entry
 
 
-def get_addboulderform_based_on_category(category: str):
-    if category.startswith("ue50") or category.startswith("u18"):
-        return AddBoulderFormU18UE50
-    elif category == "bj_woman":
-        return AddBoulderFormBJW
-    elif category == "bj_man":
-        return AddBoulderFormBJM
 
+def category2boulder_model_name__mapping(category: str):
+    if category == "u18_woman":
+        return "U18W"
+    elif category == "u18_man":
+        return "U18M"
+    elif category == "ue50_woman":
+        return "UE50W"
+    elif category == "ue50_man":
+        return "UE50M"
+    elif category == "bj_woman":
+        return "BJW"
+    elif category == "bj_man":
+        return "BJM"
+    else:
+        raise ValueError(f"Unknown category: {category}")
 
 def category2boulder_model__mapping(category: str):
     if category == "u18_woman":
