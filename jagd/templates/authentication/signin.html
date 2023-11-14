@@ -11,20 +11,32 @@
     </div>
     {% endfor %}
 
-    <h3>Log In to your account!</h3>
+    <h3>Melde dich in deinem Konto an!</h3>
     <form method="post" action="/signin" class="mb-2">
         {% csrf_token %}
         <div class="form-group">
-            <label for="username">Username</label>
+            <label for="username">Benutzername</label>
             <input type="text" class="form-control" id="username" name="username" placeholder="Enter Your Username" Required>
         </div>
         <div class="form-group">
-            <label for="pass1">Password</label>
+            <label for="pass1">Passwort</label>
             <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Enter Your Password" Required>
         </div>
 
-        <button type="submit" class="btn btn-primary">Log In</button>
+        <input type="submit" value="Einloggen" class="submit-button">
     </form>
-        <p><a href="{% url 'jagd:ranking_view' %}">CHECK RANKING</a></p>
-     <p><a href="{% url 'jagd:home' %}">HOME</a></p>
+     </br>
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+     </br>
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+        <p><a href="{% url 'jagd:ranking_view' %}" class="button">Das Ranking</a></p>
+     <p><a href="{% url 'jagd:home' %}" class="button" >Startseite</a></p>
 {% endblock %}

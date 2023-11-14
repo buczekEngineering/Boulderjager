@@ -2,22 +2,21 @@
 
 {% block content %}
 
-   <p><a href="{% url 'jagd:ranking_view' %}">CHECK RANKING</a></p>
+   <p><a href="{% url 'jagd:ranking_view' %}" class="button">Ranking überprüfen</a></p>
 
     {% if not user.is_authenticated %}
-    <p> <a href="{% url 'jagd:signup' %}">SIGN UP</a></p>
-      or <a href="{% url 'jagd:signin' %}">LOG IN</a>
+    <p> <a href="{% url 'jagd:signup' %}" class="button">Registrieren</a></p>
+      <a href="{% url 'jagd:signin' %}" class="button" >Anmelden</a>
     {% endif %}     </p>
 
     {% if user.is_authenticated %}
 
-        <h1>Hello {{username}}!</h1>
-    <ul class="menu">
-        <li><a href="{% url 'jagd:add_boulders_view' %}">Add Boulder</a></li>
-        <li><a href="{% url 'jagd:view_boulder' %}">View Your Score</a></li>
-        <li><a href="{% url 'jagd:ranking_view' %}">Check Ranking</a></li>
-        <li><a href="{% url 'jagd:signout' %}">Logout</a></li>
+        <h1>Hallo {{username}}!</h1>
+        <p><a href="{% url 'jagd:add_boulders_view' %}" class="button">Boulder hinzufügen</a></p>
+        <p><a href="{% url 'jagd:view_boulder' %}" class="button">Ihr Ergebnis anzeigen</a></p>
+        <p><a href="{% url 'jagd:ranking_view' %}" class="button">Das Ranking</a></p>
+        <p><a href="{% url 'jagd:signout' %}" class="button">Abmelden</a></p>
 
-    </ul>
+
 {% endif %}
 {% endblock %}

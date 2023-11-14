@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>Your Boulders</h1>
+    <h1>Dein Ergebnis</h1>
+     <h3> Jäger/in: {{ username }}</h3>
     {% if boulders %}
 
     <tr>
@@ -19,12 +20,11 @@
 {% endfor %}
     {% endif %}
 
-    <p><a href="{% url 'jagd:ranking_view' %}">CHECK RANKING</a></p>
-    <p><a href="{% url 'jagd:add_boulders_view' %}">ADD BOULDERS</a></p>
-     <p><a href="{% url 'jagd:home' %}">HOME</a></p>
+    <p><a href="{% url 'jagd:ranking_view' %}" class="button">Das Ranking</a></p>
+    <p><a href="{% url 'jagd:add_boulders_view' %}" class="button">Boulder hinzufügen</a></p>
+     <p><a href="{% url 'jagd:home' %}" class="button">Startseite</a></p>
         <br/>
         <br/>
-        <h3> Logged User: {{ username }}</h3>
 
 
 

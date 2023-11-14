@@ -3,7 +3,8 @@
 {% block content %}
 
 {% for key, entry in rankings.items %}
-  {% with key|add:" " as mode_gender %}
+  {% with key|add:"_" as mode_gender %}
+
         {% if key == 'u18_man' %}
     <h2>u18 Jungs</h2>
         {% elif key == 'u18_woman' %}
@@ -19,10 +20,12 @@
   {% else %}
     <h2>{{ key|title }} Ranking</h2>
   {% endif %}
-  <ul>
+    <ul style="list-style: none; padding: 0;">
     {% for entry in entry %}
+        <li style="font-family: 'Josefin Sans', sans-serif; border-bottom: 1px solid #ccc; padding: 5px 0;">
       {{ forloop.counter }}. {{ entry.user.first_name }} {{ entry.user.last_name }}                 Gesamt: {{ entry.points }}
-        </br>
+        </li>
+
     {% endfor %}
   </ul>
   {% endwith %}
@@ -31,5 +34,5 @@
     <br />
     <br />
     <br />
-  <p><a href="{% url 'jagd:home' %}">HOME</a></p>
+        <p style="font-family: 'Josefin Sans', sans-serif;"> <a href="{% url 'jagd:home' %}" class="button">Startseite</a></p>
 {% endblock %}

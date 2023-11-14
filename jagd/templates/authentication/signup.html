@@ -11,19 +11,19 @@
     </div>
     {% endfor %}
 
-    <h3>Create your account!</h3>
+    <h3>Erstelle deinen Account!</h3>
     <form method="post" action="/signup">
         {% csrf_token %}
         <div class="form-group">
-            <label for="username">Username</label>
+            <label for="username">Benutzername</label>
             <input type="text" class="form-control" id="username" name="username" placeholder="Create A Username (use only letters and numbers)" Required>
         </div>
         <div class="form-group">
-            <label for="fname">First Name</label>
+            <label for="fname">Vorname</label>
             <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter Your First Name" Required>
         </div>
         <div class="form-group">
-            <label for="lname">Last Name</label>
+            <label for="lname">Nachame</label>
             <input type="text" class="form-control" id="lname" name="lname" placeholder="Enter Your Last Name" Required>
         </div>
         <div class="form-group">
@@ -31,32 +31,44 @@
             <input type="email" class="form-control" id="email" name="email" placeholder="Enter Your Email Address" Required>
         </div>
         <div class="form-group">
-            <label for="pass1">Password</label>
+            <label for="pass1">Passwort</label>
             <input type="password" class="form-control" id="pass1" name="pass1" placeholder="Create Your Password" Required>
         </div>
         <div class="form-group">
-            <label for="pass2">Confirm Password</label>
+            <label for="pass2">Bestätige das Passwort</label>
             <input type="password" class="form-control" id="pass2" name="pass2" placeholder="Confirm Your Password" Required>
         </div>
               <div class="form-group">
-            <label for="gender">Gender</label>
+            <label for="gender">Geschlecht</label>
             <select class="form-control" id="gender" name="gender">
-                <option value="man">Man</option>
-                <option value="woman">Woman</option>
+                <option value="man">Männner</option>
+                <option value="woman">Frauen</option>
             </select>
         </div>
         <div class="form-group">
-            <label for="mode">Competition Mode</label>
+            <label for="mode">Kategorie</label>
             <select class="form-control" id="mode" name="mode">
                 <option value="ue50">Über50</option>
                 <option value="bj">Boulderjäger</option>
                 <option value="u18">Under 18</option>
             </select>
         </div>
-        <button type="submit" class="btn btn-primary">Sign Up</button>
+        <input type="submit" value="Registrieren" class="submit-button">
 
     </form>
+     </br>
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
+     </br>
+    </br>
+    </br>
+    </br>
+    </br>
+    </br>
 
-    <p><a href="{% url 'jagd:ranking_view' %}">CHECK RANKING</a></p>
-     <p><a href="{% url 'jagd:home' %}">HOME</a></p>
+    <p><a href="{% url 'jagd:ranking_view' %}" class="button">Ranking überprüfen</a></p>
+     <p><a href="{% url 'jagd:home' %}" class="button">Startseite</a></p>
 {% endblock %}

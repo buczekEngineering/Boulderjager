@@ -44,7 +44,9 @@
         font-size: 16px;
     }
     </style>
-    <h2>Add Boulders</h2>
+    <h2>Boulder eintragen</h2>
+            <h3>Jäger/in: {{ username }}</h3>
+
 <form class="form-container" method="post" action="{% url 'jagd:add_boulders_view' %}">
     {% csrf_token %}
     {% for field in form %}
@@ -52,16 +54,16 @@
             {{ field.label_tag }} {{ field }}
         {% endif %}
     {% endfor %}
-    <button type="submit">Submit</button>
+     <input type="submit" value="Boulder hinzufügen!" class="submit-button">
 </form>
 
 
-       <p><a href="{% url 'jagd:ranking_view' %}">CHECK RANKING</a></p>
-    <p><a href="{% url 'jagd:view_boulder' %}">VIEW YOUR BOULDERS</a></p>
-     <p><a href="{% url 'jagd:home' %}">HOME</a></p>
+       <p><a href="{% url 'jagd:ranking_view' %}" class="button">Das Ranking</a></p>
+    <p><a href="{% url 'jagd:view_boulder' %}" class="button" >Ihr Ergebnis anzeigen</a></p>
+     <p><a href="{% url 'jagd:home' %}" class="button" >Startseite</a></p>
         <br/>
         <br/>
          <div class="logged-user" style="margin-top: 20px; font-size: 16px;">
-        <h3>Logged User: {{ username }}</h3>
+
     </div>
 {% endblock %}
