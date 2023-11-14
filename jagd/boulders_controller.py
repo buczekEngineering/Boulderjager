@@ -18,16 +18,21 @@ def get_existing_boulder_data(user, category):
     return existing_boulder
 
 
-def retrieve_boulders_based_on_(user):
-    cur_user_profile = UserProfile.objects.get(user=user)
-    user_gender = cur_user_profile.gender
-    user_mode = cur_user_profile.mode
-    user_category = f"{user_mode}_{user_gender}"
-    model_name = category2boulder_model__mapping(user_category)
+def retrieve_boulders_based_on_(user, category):
+    model_name = category2boulder_model__mapping(category)
     boulder_entry = model_name.objects.filter(user=user)
 
     return boulder_entry
 
+def retrieve_tops_amount(user, category):
+    model_name = category2boulder_model__mapping(category)
+    tops_amount = model_name.objects.get(user=user).tops_amount
+    return tops_amount
+
+def retrieve_zones_amount(user, category):
+    model_name = category2boulder_model__mapping(category)
+    zones_amount = model_name.objects.get(user=user).tops_amount
+    return zones_amount
 
 
 def category2boulder_model_name__mapping(category: str):

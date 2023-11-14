@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.contrib import admin
 
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     GENDER_CHOICES = [
@@ -15,6 +16,7 @@ class UserProfile(models.Model):
     ]
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='man')
     mode = models.CharField(max_length=10, choices=COMPETITION_CHOICES, default='bj')
+
 
 class BJW(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -49,9 +51,13 @@ class BJW(models.Model):
     time = models.TimeField(auto_now_add=True)
     points = models.IntegerField(default=0)
 
+    tops_amount = models.IntegerField(default=0)
+    bonus_amount = models.IntegerField(default=0)
+
     def save(self, *args, **kwargs):
         # Calculate points based on boulder values
         self.points = self.calculate_points()
+        self.tops_amount, self.bonus_amount = self.calculate_tops_and_bonuses()
         super(BJW, self).save(*args, **kwargs)
 
     def get_boulder_fields_and_values(self):
@@ -61,13 +67,35 @@ class BJW(models.Model):
         return boulder_values
 
     def calculate_points(self):
-
         boulder2points_mapping = {"None": 0, "Bonus": 1, "Top": 2}
 
         # Calculate points for each boulder and sum them up
-        points = sum(boulder2points_mapping.get(boulder, 0) for boulder in [self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6, self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11, self.boulder_12, self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16, self.boulder_17, self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21, self.boulder_22, self.boulder_23, self.boulder_24, self.boulder_25, self.boulder_26, self.boulder_27, self.boulder_28])
+        points = sum(boulder2points_mapping.get(boulder, 0) for boulder in
+                     [self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6, self.boulder_7, self.boulder_8,
+                      self.boulder_9, self.boulder_10, self.boulder_11, self.boulder_12, self.boulder_13,
+                      self.boulder_14, self.boulder_15, self.boulder_16, self.boulder_17, self.boulder_18,
+                      self.boulder_19, self.boulder_20, self.boulder_21, self.boulder_22, self.boulder_23,
+                      self.boulder_24, self.boulder_25, self.boulder_26, self.boulder_27, self.boulder_28])
 
         return points
+
+    def calculate_tops_and_bonuses(self):
+        tops = sum(1 for boulder in
+                   [self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6, self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10,
+                    self.boulder_11, self.boulder_12, self.boulder_13, self.boulder_14, self.boulder_15,
+                    self.boulder_16, self.boulder_17, self.boulder_18, self.boulder_19, self.boulder_20,
+                    self.boulder_21, self.boulder_22, self.boulder_23, self.boulder_24, self.boulder_25,
+                    self.boulder_26, self.boulder_27, self.boulder_28] if
+                   boulder == 'Top')
+        bonuses = sum(1 for boulder in
+                      [self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6, self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10,
+                       self.boulder_11, self.boulder_12, self.boulder_13, self.boulder_14, self.boulder_15,
+                       self.boulder_16, self.boulder_17, self.boulder_18, self.boulder_19, self.boulder_20,
+                       self.boulder_21, self.boulder_22, self.boulder_23, self.boulder_24, self.boulder_25,
+                       self.boulder_26, self.boulder_27, self.boulder_28] if
+                      boulder == 'Bonus')
+        return tops, bonuses
+
 
 class BJM(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -101,12 +129,14 @@ class BJM(models.Model):
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
     points = models.IntegerField(default=0)
+    tops_amount = models.IntegerField(default=0)
+    bonus_amount = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
         # Calculate points based on boulder values
         self.points = self.calculate_points()
+        self.tops_amount, self.bonus_amount = self.calculate_tops_and_bonuses()
         super(BJM, self).save(*args, **kwargs)
-
 
     def get_boulder_fields_and_values(self):
         # Return a dictionary of boulder field names and their values
@@ -115,13 +145,34 @@ class BJM(models.Model):
         return boulder_values
 
     def calculate_points(self):
-
         boulder2points_mapping = {"None": 0, "Bonus": 1, "Top": 2}
 
-        # Calculate points for each boulder and sum them up
-        points = sum(boulder2points_mapping.get(boulder, 0) for boulder in [self.boulder_5, self.boulder_6, self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11, self.boulder_12, self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16, self.boulder_17, self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21, self.boulder_22, self.boulder_23, self.boulder_24, self.boulder_25, self.boulder_26, self.boulder_27, self.boulder_28, self.boulder_29, self.boulder_30])
+        points = sum(boulder2points_mapping.get(boulder, 0) for boulder in
+                     [self.boulder_5, self.boulder_6, self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10,
+                      self.boulder_11, self.boulder_12, self.boulder_13, self.boulder_14, self.boulder_15,
+                      self.boulder_16, self.boulder_17, self.boulder_18, self.boulder_19, self.boulder_20,
+                      self.boulder_21, self.boulder_22, self.boulder_23, self.boulder_24, self.boulder_25,
+                      self.boulder_26, self.boulder_27, self.boulder_28, self.boulder_29, self.boulder_30])
 
         return points
+
+    def calculate_tops_and_bonuses(self):
+        tops = sum(1 for boulder in
+                   [self.boulder_5, self.boulder_6, self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10,
+                    self.boulder_11, self.boulder_12, self.boulder_13, self.boulder_14, self.boulder_15,
+                    self.boulder_16, self.boulder_17, self.boulder_18, self.boulder_19, self.boulder_20,
+                    self.boulder_21, self.boulder_22, self.boulder_23, self.boulder_24, self.boulder_25,
+                    self.boulder_26, self.boulder_27, self.boulder_28, self.boulder_29, self.boulder_30] if
+                   boulder == 'Top')
+        bonuses = sum(1 for boulder in
+                      [self.boulder_5, self.boulder_6, self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10,
+                       self.boulder_11, self.boulder_12, self.boulder_13, self.boulder_14, self.boulder_15,
+                       self.boulder_16, self.boulder_17, self.boulder_18, self.boulder_19, self.boulder_20,
+                       self.boulder_21, self.boulder_22, self.boulder_23, self.boulder_24, self.boulder_25,
+                       self.boulder_26, self.boulder_27, self.boulder_28, self.boulder_29, self.boulder_30] if
+                      boulder == 'Bonus')
+        return tops, bonuses
+
 
 class U18W(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -154,26 +205,48 @@ class U18W(models.Model):
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
     points = models.IntegerField(default=0)
+    tops_amount = models.IntegerField(default=0)
+    bonus_amount = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
-        # Calculate points based on boulder values
+
         self.points = self.calculate_points()
+        self.tops_amount, self.bonus_amount = self.calculate_tops_and_bonuses()
         super(U18W, self).save(*args, **kwargs)
 
     def get_boulder_fields_and_values(self):
-        # Return a dictionary of boulder field names and their values
+
         boulder_fields = [field.name for field in self._meta.fields if field.name.startswith("boulder_")]
         boulder_values = {field: getattr(self, field, "") for field in boulder_fields}
         return boulder_values
 
     def calculate_points(self):
-
         boulder2points_mapping = {"None": 0, "Bonus": 1, "Top": 2}
 
-        # Calculate points for each boulder and sum them up
-        points = sum(boulder2points_mapping.get(boulder, 0) for boulder in [self.boulder_1, self.boulder_2, self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6, self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11, self.boulder_12, self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16, self.boulder_17, self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21, self.boulder_22, self.boulder_23, self.boulder_24, self.boulder_25])
+        points = sum(boulder2points_mapping.get(boulder, 0) for boulder in
+                     [self.boulder_1, self.boulder_2, self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6,
+                      self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11, self.boulder_12,
+                      self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16, self.boulder_17,
+                      self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21, self.boulder_22,
+                      self.boulder_23, self.boulder_24, self.boulder_25])
 
         return points
+
+    def calculate_tops_and_bonuses(self):
+        tops = sum(1 for boulder in
+                   [self.boulder_1, self.boulder_2, self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6,
+                    self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11, self.boulder_12,
+                    self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16, self.boulder_17,
+                    self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21, self.boulder_22,
+                    self.boulder_23, self.boulder_24, self.boulder_25] if boulder == 'Top')
+        bonuses = sum(1 for boulder in
+                      [self.boulder_1, self.boulder_2, self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6,
+                       self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11,
+                       self.boulder_12, self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16,
+                       self.boulder_17, self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21,
+                       self.boulder_22, self.boulder_23, self.boulder_24, self.boulder_25] if boulder == 'Bonus')
+        return tops, bonuses
+
 
 class U18M(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -206,10 +279,13 @@ class U18M(models.Model):
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
     points = models.IntegerField(default=0)
+    tops_amount = models.IntegerField(default=0)
+    bonus_amount = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
         # Calculate points based on boulder values
         self.points = self.calculate_points()
+        self.tops_amount, self.bonus_amount = self.calculate_tops_and_bonuses()
         super(U18M, self).save(*args, **kwargs)
 
     def get_boulder_fields_and_values(self):
@@ -219,13 +295,33 @@ class U18M(models.Model):
         return boulder_values
 
     def calculate_points(self):
-
         boulder2points_mapping = {"None": 0, "Bonus": 1, "Top": 2}
 
         # Calculate points for each boulder and sum them up
-        points = sum(boulder2points_mapping.get(boulder, 0) for boulder in [self.boulder_1, self.boulder_2, self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6, self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11, self.boulder_12, self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16, self.boulder_17, self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21, self.boulder_22, self.boulder_23, self.boulder_24, self.boulder_25])
+        points = sum(boulder2points_mapping.get(boulder, 0) for boulder in
+                     [self.boulder_1, self.boulder_2, self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6,
+                      self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11, self.boulder_12,
+                      self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16, self.boulder_17,
+                      self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21, self.boulder_22,
+                      self.boulder_23, self.boulder_24, self.boulder_25])
 
         return points
+
+    def calculate_tops_and_bonuses(self):
+        tops = sum(1 for boulder in
+                   [self.boulder_1, self.boulder_2, self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6,
+                    self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11, self.boulder_12,
+                    self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16, self.boulder_17,
+                    self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21, self.boulder_22,
+                    self.boulder_23, self.boulder_24, self.boulder_25] if boulder == 'Top')
+        bonuses = sum(1 for boulder in
+                      [self.boulder_1, self.boulder_2, self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6,
+                       self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11,
+                       self.boulder_12, self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16,
+                       self.boulder_17, self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21,
+                       self.boulder_22, self.boulder_23, self.boulder_24, self.boulder_25] if boulder == 'Bonus')
+        return tops, bonuses
+
 
 class UE50W(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -258,10 +354,13 @@ class UE50W(models.Model):
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
     points = models.IntegerField(default=0)
+    tops_amount = models.IntegerField(default=0)
+    bonus_amount = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
         # Calculate points based on boulder values
         self.points = self.calculate_points()
+        self.tops_amount, self.bonus_amount = self.calculate_tops_and_bonuses()
         super(UE50W, self).save(*args, **kwargs)
 
     def get_boulder_fields_and_values(self):
@@ -271,13 +370,33 @@ class UE50W(models.Model):
         return boulder_values
 
     def calculate_points(self):
-
         boulder2points_mapping = {"None": 0, "Bonus": 1, "Top": 2}
 
         # Calculate points for each boulder and sum them up
-        points = sum(boulder2points_mapping.get(boulder, 0) for boulder in [self.boulder_1, self.boulder_2, self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6, self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11, self.boulder_12, self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16, self.boulder_17, self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21, self.boulder_22, self.boulder_23, self.boulder_24, self.boulder_25])
+        points = sum(boulder2points_mapping.get(boulder, 0) for boulder in
+                     [self.boulder_1, self.boulder_2, self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6,
+                      self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11, self.boulder_12,
+                      self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16, self.boulder_17,
+                      self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21, self.boulder_22,
+                      self.boulder_23, self.boulder_24, self.boulder_25])
 
         return points
+
+    def calculate_tops_and_bonuses(self):
+        tops = sum(1 for boulder in
+                   [self.boulder_1, self.boulder_2, self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6,
+                    self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11, self.boulder_12,
+                    self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16, self.boulder_17,
+                    self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21, self.boulder_22,
+                    self.boulder_23, self.boulder_24, self.boulder_25] if boulder == 'Top')
+        bonuses = sum(1 for boulder in
+                      [self.boulder_1, self.boulder_2, self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6,
+                       self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11,
+                       self.boulder_12, self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16,
+                       self.boulder_17, self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21,
+                       self.boulder_22, self.boulder_23, self.boulder_24, self.boulder_25] if boulder == 'Bonus')
+        return tops, bonuses
+
 
 class UE50M(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -310,10 +429,13 @@ class UE50M(models.Model):
     date = models.DateField(auto_now_add=True)
     time = models.TimeField(auto_now_add=True)
     points = models.IntegerField(default=0)
+    tops_amount = models.IntegerField(default=0)
+    bonus_amount = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
         # Calculate points based on boulder values
         self.points = self.calculate_points()
+        self.tops_amount, self.bonus_amount = self.calculate_tops_and_bonuses()
         super(UE50M, self).save(*args, **kwargs)
 
     def get_boulder_fields_and_values(self):
@@ -323,13 +445,32 @@ class UE50M(models.Model):
         return boulder_values
 
     def calculate_points(self):
-
         boulder2points_mapping = {"None": 0, "Bonus": 1, "Top": 2}
 
         # Calculate points for each boulder and sum them up
-        points = sum(boulder2points_mapping.get(boulder, 0) for boulder in [self.boulder_1, self.boulder_2, self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6, self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11, self.boulder_12, self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16, self.boulder_17, self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21, self.boulder_22, self.boulder_23, self.boulder_24, self.boulder_25])
+        points = sum(boulder2points_mapping.get(boulder, 0) for boulder in
+                     [self.boulder_1, self.boulder_2, self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6,
+                      self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11, self.boulder_12,
+                      self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16, self.boulder_17,
+                      self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21, self.boulder_22,
+                      self.boulder_23, self.boulder_24, self.boulder_25])
 
         return points
+
+    def calculate_tops_and_bonuses(self):
+        tops = sum(1 for boulder in
+                   [self.boulder_1, self.boulder_2, self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6,
+                    self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11, self.boulder_12,
+                    self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16, self.boulder_17,
+                    self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21, self.boulder_22,
+                    self.boulder_23, self.boulder_24, self.boulder_25] if boulder == 'Top')
+        bonuses = sum(1 for boulder in
+                      [self.boulder_1, self.boulder_2, self.boulder_3, self.boulder_4, self.boulder_5, self.boulder_6,
+                       self.boulder_7, self.boulder_8, self.boulder_9, self.boulder_10, self.boulder_11,
+                       self.boulder_12, self.boulder_13, self.boulder_14, self.boulder_15, self.boulder_16,
+                       self.boulder_17, self.boulder_18, self.boulder_19, self.boulder_20, self.boulder_21,
+                       self.boulder_22, self.boulder_23, self.boulder_24, self.boulder_25] if boulder == 'Bonus')
+        return tops, bonuses
 
 
 class VerificationCode(models.Model):
@@ -348,4 +489,3 @@ admin.site.register(BJM)
 admin.site.register(BJW)
 admin.site.register(U18M)
 admin.site.register(U18W)
-

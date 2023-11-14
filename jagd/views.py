@@ -1,7 +1,7 @@
 from .forms import AddBoulderFormBJM, AddBoulderFormBJW, AddBoulderFormUE50M, AddBoulderFormU18M, \
     AddBoulderFormU18W, AddBoulderFormUE50W
 from .boulders_controller import get_sorted_boulder_data_based_on, get_existing_boulder_data, \
-    retrieve_boulders_based_on_
+    retrieve_boulders_based_on_, retrieve_tops_amount, retrieve_zones_amount
 from django.contrib.auth.decorators import login_required
 import logging
 from .models import UserProfile, U18W, U18M, UE50W, UE50M, BJM, BJW
@@ -39,8 +39,15 @@ def ranking_view(request):
 
 @login_required
 def view_boulder(request):
-    user_boulders = retrieve_boulders_based_on_(request.user)
-    return render(request, 'view_boulder.html', {'boulders': user_boulders, 'username': request.user.username})
+
+    cur_user_profile = UserProfile.objects.get(user=request.user)
+    user_gender = cur_user_profile.gender
+    user_mode = cur_user_profile.mode
+    user_category = f"{user_mode}_{user_gender}"
+    user_boulders = retrieve_boulders_based_on_(request.user, user_category)
+    tops = retrieve_tops_amount(request.user, user_category)
+    zones = retrieve_zones_amount(request.user, user_category)
+    return render(request, 'view_boulder.html', {'boulders': user_boulders, 'username': request.user.username, "tops": tops, "zones": zones})
 
 
 @login_required

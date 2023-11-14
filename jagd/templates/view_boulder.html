@@ -3,6 +3,7 @@
 {% block content %}
     <h1>Dein Ergebnis</h1>
      <h3> Jäger/in: {{ username }}</h3>
+     <h2> Tops: {{ tops }} Zonen: {{ zones }}</h2>
     {% if boulders %}
 
 
@@ -16,7 +17,8 @@
         {% endfor %}
       <br/>
         <br/>
-        <h2> Gesamt {{ boulder.points }}</h2>
+
+
     </ul>
 {% endfor %}
     {% endif %}
