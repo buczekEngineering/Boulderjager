@@ -5,18 +5,19 @@
      <h3> Jäger/in: {{ username }}</h3>
     {% if boulders %}
 
-    <tr>
+
         {% for boulder in boulders %}
-    <tr>
+      <ul style="list-style: none; padding: 0;">
         {% for field, value in boulder.get_boulder_fields_and_values.items %}
-            <td> {{ field }} ->> {{ value }}</td>
+                 <li style="font-family: 'Josefin Sans', sans-serif; border-bottom: 1px solid #ccc; padding: 5px 0;">
+                    {{ field }}:  {{ value }}   </li>
             <br/>
             <br/>
         {% endfor %}
       <br/>
         <br/>
-        <td> Gesamt {{ boulder.points }}</td>
-    </tr>
+        <h2> Gesamt {{ boulder.points }}</h2>
+    </ul>
 {% endfor %}
     {% endif %}
 
