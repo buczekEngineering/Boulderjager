@@ -133,7 +133,6 @@ class BJM(models.Model):
     bonus_amount = models.IntegerField(default=0)
 
     def save(self, *args, **kwargs):
-        # Calculate points based on boulder values
         self.points = self.calculate_points()
         self.tops_amount, self.bonus_amount = self.calculate_tops_and_bonuses()
         super(BJM, self).save(*args, **kwargs)

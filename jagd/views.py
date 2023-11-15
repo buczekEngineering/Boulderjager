@@ -97,7 +97,7 @@ def create_boulder_entry(user, category):
 
 def retrieve_form_based_on_category(category):
     logger.info(f"Retrieving form based on category: {category}")
-    category2form_mapping = {"ue18_man": AddBoulderFormU18M,
+    category2form_mapping = {"u18_man": AddBoulderFormU18M,
                              "bj_man": AddBoulderFormBJM,
                              "ue50_woman": AddBoulderFormUE50W,
                              "bj_woman": AddBoulderFormBJW,
