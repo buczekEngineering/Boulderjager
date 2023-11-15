@@ -31,7 +31,7 @@ def retrieve_tops_amount(user, category):
 
 def retrieve_zones_amount(user, category):
     model_name = category2boulder_model__mapping(category)
-    zones_amount = model_name.objects.get(user=user).tops_amount
+    zones_amount = model_name.objects.get(user=user).bonus_amount
     return zones_amount
 
 
