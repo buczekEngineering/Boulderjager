@@ -168,8 +168,8 @@ def signin(request):
             username = user.username
             return render(request, 'home.html', {"username": username})
         else:
-            messages.error(request, "Bad Credentials!!")
-            return redirect('jagd:home')
+            messages.error(request, "Benutzername oder Passwort ist falsch!!")
+            return redirect('jagd:signin')
 
     return render(request, "authentication/signin.html")
 
