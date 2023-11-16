@@ -6,6 +6,7 @@
 
    <p><a href="{% url 'jagd:ranking_view' %}" class="button">Ranking überprüfen</a></p>
         <img src="{% static 'images/jagd.png' %}" alt="" class="responsive-image">
+
     {% if not user.is_authenticated %}
     <p> <a href="{% url 'jagd:signup' %}" class="button">Registrieren</a></p>
       <a href="{% url 'jagd:signin' %}" class="button" >Anmelden</a>
